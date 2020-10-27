@@ -1,6 +1,7 @@
 FROM coredevorg/stretch-sysutils
 LABEL maintainer CoreDev IT
 ARG ONLYOFFICE_VALUE=onlyoffice
+ARG SECRET=onlyoffice
 
 ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
@@ -28,7 +29,7 @@ RUN echo "SERVER_ADDITIONAL_ERL_ARGS=\"+S 1:1\"" | tee -a /etc/rabbitmq/rabbitmq
     rm -rf /var/lib/apt/lists/*
 
 COPY config /app/ds/setup/config/
-COPY run-document-server.sh /app/ds/run-document-server.sh
+COPY *.sh /app/ds/
 
 ARG REPO_URL="deb http://download.onlyoffice.com/repo/debian squeeze main"
 ARG COMPANY_NAME=onlyoffice
@@ -45,6 +46,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0x8320ca65cb2de8e5 
     apt-get -yq install $COMPANY_NAME-$PRODUCT_NAME && \
     service postgresql stop && \
     chmod 755 /app/ds/*.sh && \
+    /app/ds/update-local-json.sh "$SECRET" && \
     rm -rf /var/log/$COMPANY_NAME && \
     rm -rf /var/lib/apt/lists/*
 

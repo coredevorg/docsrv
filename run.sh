@@ -1,0 +1,1 @@
+docker run -v $MNT/log:/var/log/onlyoffice -v $MNT/lib:/var/lib/onlyoffice -v $MNT/www:/var/www/onlyoffice/Data -v $MNT/postgresql:/var/lib/postgresql -v $MNT/rabbitmq:/var/lib/rabbitmq -v $MNT/redis:/var/lib/redis -v $MNT/fonts:/usr/share/fonts/truetype/custom --network=office --name=onlyoffice -d documentserver
